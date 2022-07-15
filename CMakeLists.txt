@@ -30,7 +30,7 @@ include(GNUInstallDirs)
 option(STATIC_DRUMSTICK "Build static plugins instead of shared ones" OFF)
 
 find_package(QT NAMES Qt5 Qt6 REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets)
 find_package(Drumstick 2.7 REQUIRED COMPONENTS RT)
 
 set(DRUMSTICK_PLUGINS_DIR "drumstick2")
@@ -50,25 +50,27 @@ set(DUMMY_OUT_SOURCES
 
 if(STATIC_DRUMSTICK)
     add_library(drumstick-rt-dummy-in STATIC ${DUMMY_IN_SOURCES})
-    target_compile_definitions(drumstick-rt-dummy-in PRIVATE QT_STATICPLUGIN)
+    target_compile_definitions(drumstick-rt-dummy-in PRIVATE QT_STATICPLUGIN VERSION=${PROJECT_VERSION})
     
     add_library(drumstick-rt-dummy-out STATIC ${DUMMY_OUT_SOURCES})
-    target_compile_definitions(drumstick-rt-dummy-out PRIVATE QT_STATICPLUGIN)
+    target_compile_definitions(drumstick-rt-dummy-out PRIVATE QT_STATICPLUGIN VERSION=${PROJECT_VERSION})
 else()
     add_library(drumstick-rt-dummy-in MODULE ${DUMMY_IN_SOURCES})
-    target_compile_definitions(drumstick-rt-dummy-in PRIVATE QT_PLUGIN)
+    target_compile_definitions(drumstick-rt-dummy-in PRIVATE QT_PLUGIN VERSION=${PROJECT_VERSION})
     
     add_library(drumstick-rt-dummy-out MODULE ${DUMMY_OUT_SOURCES})
-    target_compile_definitions(drumstick-rt-dummy-out PRIVATE QT_PLUGIN)
+    target_compile_definitions(drumstick-rt-dummy-out PRIVATE QT_PLUGIN VERSION=${PROJECT_VERSION})
 endif()
 
 target_link_libraries(drumstick-rt-dummy-in PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Widgets
     Drumstick::RT
 )
 
 target_link_libraries(drumstick-rt-dummy-out PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Widgets
     Drumstick::RT
 )
 
