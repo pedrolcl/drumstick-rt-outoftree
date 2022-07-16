@@ -19,8 +19,7 @@
 #include <QMessageBox>
 #include "dummyinput.h"
 
-namespace drumstick {
-namespace rt {
+using namespace drumstick::rt;
 
 void DummyInput::initialize(QSettings* settings)
 {
@@ -84,8 +83,8 @@ bool DummyInput::isEnabledMIDIThru()
 
 bool DummyInput::configure(QWidget *parent)
 {
-    return QMessageBox::Ok == QMessageBox::information(parent, "Hello Configuration",
-                                                       "Hello world configuration dialog!",
+    return QMessageBox::Ok == QMessageBox::information(parent, "DummyInput Configuration",
+                                                       "DummyInput sample configuration dialog",
                                                        QMessageBox::Ok | QMessageBox::Cancel);
 }
 
@@ -108,5 +107,3 @@ bool DummyInput::getConfigurable()
 {
     return true;
 }
-
-}}

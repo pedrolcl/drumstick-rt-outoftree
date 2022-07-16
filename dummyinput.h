@@ -22,49 +22,44 @@
 #include <QObject>
 #include <drumstick/rtmidiinput.h>
 
-namespace drumstick {
-namespace rt {
+class DummyInput : public drumstick::rt::MIDIInput
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "net.sourceforge.drumstick.rt.MIDIInput/2.0")
+    Q_INTERFACES(drumstick::rt::MIDIInput)
+    Q_PROPERTY(QStringList diagnostics READ getDiagnostics)
+    Q_PROPERTY(QString libversion READ getLibVersion)
+    Q_PROPERTY(bool status READ getStatus)
+    Q_PROPERTY(bool isconfigurable READ getConfigurable)
 
-    class DummyInput : public MIDIInput
-    {
-        Q_OBJECT
-        Q_PLUGIN_METADATA(IID "net.sourceforge.drumstick.rt.MIDIInput/2.0")
-        Q_INTERFACES(drumstick::rt::MIDIInput)
-        Q_PROPERTY(QStringList diagnostics READ getDiagnostics)
-        Q_PROPERTY(QString libversion READ getLibVersion)
-        Q_PROPERTY(bool status READ getStatus)
-        Q_PROPERTY(bool isconfigurable READ getConfigurable)
+public:
+    explicit DummyInput(QObject *parent = nullptr) : MIDIInput(parent) {}
+    virtual ~DummyInput() = default;
 
-    public:
-        explicit DummyInput(QObject *parent = nullptr) : MIDIInput(parent) {}
-        virtual ~DummyInput() = default;
+    // MIDIInput interface
+public:
+    virtual void initialize(QSettings* settings);
+    virtual QString backendName();
+    virtual QString publicName();
+    virtual void setPublicName(QString name);
+    virtual QList<drumstick::rt::MIDIConnection> connections(bool advanced);
+    virtual void setExcludedConnections(QStringList conns);
+    virtual void open(const drumstick::rt::MIDIConnection& name);
+    virtual void close();
+    virtual drumstick::rt::MIDIConnection currentConnection();
 
-        // MIDIInput interface
-    public:
-        virtual void initialize(QSettings* settings);
-        virtual QString backendName();
-        virtual QString publicName();
-        virtual void setPublicName(QString name);
-        virtual QList<MIDIConnection> connections(bool advanced);
-        virtual void setExcludedConnections(QStringList conns);
-        virtual void open(const MIDIConnection& name);
-        virtual void close();
-        virtual MIDIConnection currentConnection();
+    virtual void setMIDIThruDevice(drumstick::rt::MIDIOutput *device);
+    virtual void enableMIDIThru(bool enable);
+    virtual bool isEnabledMIDIThru();
 
-        virtual void setMIDIThruDevice(MIDIOutput *device);
-        virtual void enableMIDIThru(bool enable);
-        virtual bool isEnabledMIDIThru();
+public slots:
+    bool configure(QWidget *parent);
 
-    public slots:
-        bool configure(QWidget *parent);
-
-    private:
-        QStringList getDiagnostics();
-        QString getLibVersion();
-        bool getStatus();
-        bool getConfigurable();
-    };
-
-}}
+private:
+    QStringList getDiagnostics();
+    QString getLibVersion();
+    bool getStatus();
+    bool getConfigurable();
+};
 
 #endif // DUMMYINPUT_H

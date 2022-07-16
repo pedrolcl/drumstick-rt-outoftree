@@ -22,55 +22,50 @@
 #include <QObject>
 #include <drumstick/rtmidioutput.h>
 
-namespace drumstick {
-namespace rt {
+class DummyOutput : public drumstick::rt::MIDIOutput
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "net.sourceforge.drumstick.rt.MIDIOutput/2.0")
+    Q_INTERFACES(drumstick::rt::MIDIOutput)
+    Q_PROPERTY(QStringList diagnostics READ getDiagnostics)
+    Q_PROPERTY(QString libversion READ getLibVersion)
+    Q_PROPERTY(bool status READ getStatus)
+    Q_PROPERTY(bool isconfigurable READ getConfigurable)
 
-    class DummyOutput : public MIDIOutput
-    {
-        Q_OBJECT
-        Q_PLUGIN_METADATA(IID "net.sourceforge.drumstick.rt.MIDIOutput/2.0")
-        Q_INTERFACES(drumstick::rt::MIDIOutput)
-        Q_PROPERTY(QStringList diagnostics READ getDiagnostics)
-        Q_PROPERTY(QString libversion READ getLibVersion)
-        Q_PROPERTY(bool status READ getStatus)
-        Q_PROPERTY(bool isconfigurable READ getConfigurable)
+public:
+    explicit DummyOutput(QObject *parent = nullptr) : MIDIOutput(parent) {}
+    virtual ~DummyOutput() = default;
 
-    public:
-        explicit DummyOutput(QObject *parent = nullptr) : MIDIOutput(parent) {}
-        virtual ~DummyOutput() = default;
+    // MIDIOutput interface
+public:
+    virtual void initialize(QSettings* settings);
+    virtual QString backendName();
+    virtual QString publicName();
+    virtual void setPublicName(QString name);
+    virtual QList<drumstick::rt::MIDIConnection> connections(bool advanced);
+    virtual void setExcludedConnections(QStringList conns);
+    virtual void open(const drumstick::rt::MIDIConnection& name);
+    virtual void close();
+    virtual drumstick::rt::MIDIConnection currentConnection();
 
-        // MIDIOutput interface
-    public:
-        virtual void initialize(QSettings* settings);
-        virtual QString backendName();
-        virtual QString publicName();
-        virtual void setPublicName(QString name);
-        virtual QList<MIDIConnection> connections(bool advanced);
-        virtual void setExcludedConnections(QStringList conns);
-        virtual void open(const MIDIConnection& name);
-        virtual void close();
-        virtual MIDIConnection currentConnection();
+public slots:
+    virtual void sendNoteOff(int chan, int note, int vel);
+    virtual void sendNoteOn(int chan, int note, int vel);
+    virtual void sendKeyPressure(int chan, int note, int value);
+    virtual void sendController(int chan, int control, int value);
+    virtual void sendProgram(int chan, int program);
+    virtual void sendChannelPressure(int chan, int value);
+    virtual void sendPitchBend(int chan, int value);
+    virtual void sendSysex(const QByteArray &data);
+    virtual void sendSystemMsg(const int status);
 
-    public slots:
-        virtual void sendNoteOff(int chan, int note, int vel);
-        virtual void sendNoteOn(int chan, int note, int vel);
-        virtual void sendKeyPressure(int chan, int note, int value);
-        virtual void sendController(int chan, int control, int value);
-        virtual void sendProgram(int chan, int program);
-        virtual void sendChannelPressure(int chan, int value);
-        virtual void sendPitchBend(int chan, int value);
-        virtual void sendSysex(const QByteArray &data);
-        virtual void sendSystemMsg(const int status);
+    bool configure(QWidget *parent);
 
-        bool configure(QWidget *parent);
-
-    private:
-        QStringList getDiagnostics();
-        QString getLibVersion();
-        bool getStatus();
-        bool getConfigurable();
-    };
-
-}}
+private:
+    QStringList getDiagnostics();
+    QString getLibVersion();
+    bool getStatus();
+    bool getConfigurable();
+};
 
 #endif // DUMMYOUTPUT_H

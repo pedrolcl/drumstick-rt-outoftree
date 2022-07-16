@@ -19,8 +19,7 @@
 #include <QMessageBox>
 #include "dummyoutput.h"
 
-namespace drumstick {
-namespace rt {
+using namespace drumstick::rt;
 
 void DummyOutput::initialize(QSettings* settings)
 {
@@ -125,8 +124,8 @@ void DummyOutput::sendSystemMsg(const int status)
 
 bool DummyOutput::configure(QWidget *parent)
 {
-    return QMessageBox::Ok == QMessageBox::information(parent, "Hello Configuration",
-                                                       "Hello world configuration dialog!",
+    return QMessageBox::Ok == QMessageBox::information(parent, "DummyOutput Configuration",
+                                                       "DummyOutput sample configuration dialog",
                                                        QMessageBox::Ok | QMessageBox::Cancel);
 }
 
@@ -149,5 +148,3 @@ bool DummyOutput::getConfigurable()
 {
     return true;
 }
-
-}}
