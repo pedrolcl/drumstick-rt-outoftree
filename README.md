@@ -27,4 +27,4 @@ And also a public slot with this name and signature:
 
 Use this template to write your own plugins and enjoy!
 
-[^1] Located outside of a source tree. Antonym: in-tree‎. [Source](https://www.wordsense.eu/out-of-tree/). This software engineering term was originated in the Linux kernel development community, [probably as a pun](https://www.collinsdictionary.com/dictionary/english/out-of-your-tree).
+[^1]: Located outside of a source tree. Antonym: in-tree‎. [Source](https://www.wordsense.eu/out-of-tree/). This software engineering term was originated in the Linux kernel development community, [probably as a pun](https://www.collinsdictionary.com/dictionary/english/out-of-your-tree).
